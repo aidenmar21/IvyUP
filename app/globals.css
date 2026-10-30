@@ -1,26 +1,268 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* The brand is a light, paper-toned theme. `dark:` utilities only apply under an explicit .dark class, never the OS setting. */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * IvyUp design tokens. Every color, size, radius and duration used in the app
+ * comes from this file. See DESIGN.md for the rationale.
+ */
 
 @theme inline {
+  /* Brand palette */
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-ink-400: var(--ink-400);
+  --color-ink-600: var(--ink-600);
+  --color-ink-900: var(--ink-900);
+  --color-ivy-100: var(--ivy-100);
+  --color-ivy-200: var(--ivy-200);
+  --color-ivy-700: var(--ivy-700);
+  --color-ivy-800: var(--ivy-800);
+  --color-ivy-900: var(--ivy-900);
+  --color-brass-100: var(--brass-100);
+  --color-brass-500: var(--brass-500);
+  --color-brass-700: var(--brass-700);
+  --color-danger: var(--danger);
+
+  /* shadcn semantic mapping */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Type: display serif + grotesk body */
+  --font-sans: var(--font-hanken);
+  --font-display: var(--font-newsreader);
+  --font-heading: var(--font-newsreader);
+
+  /* Type scale (px): 12 14 16 18 22 28 36 48 64 80 */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.6;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.35;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.25;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.15;
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.08;
+  --text-5xl: 4rem;
+  --text-5xl--line-height: 1.02;
+  --text-6xl: 5rem;
+  --text-6xl--line-height: 1;
+
+  /* Radii: one for controls, one for surfaces */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 10px;
+  --radius-xl: 16px;
+  --radius-2xl: 16px;
+  --radius-3xl: 16px;
+  --radius-4xl: 16px;
+
+  /* Motion */
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-soft: cubic-bezier(0.4, 0, 0.6, 1);
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --shadow-lift: 0 1px 2px rgb(26 28 24 / 0.06), 0 8px 24px -8px rgb(26 28 24 / 0.12);
+  --shadow-float: 0 2px 4px rgb(26 28 24 / 0.06), 0 24px 48px -16px rgb(26 28 24 / 0.22);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --paper: #f7f4ec;
+  --paper-2: #efebe0;
+  --surface: #fbf9f4;
+  --line: #dad4c4;
+  --ink-400: #6b6a60;
+  --ink-600: #4a4a42;
+  --ink-900: #1a1c18;
+  --ivy-100: #e3ece4;
+  --ivy-200: #c6d9ca;
+  --ivy-700: #1f5a3d;
+  --ivy-800: #184a32;
+  --ivy-900: #12321f;
+  --brass-100: #f3ead6;
+  --brass-500: #b08a3e;
+  --brass-700: #7d5f22;
+  --danger: #9b2c1f;
+
+  --background: var(--paper);
+  --foreground: var(--ink-900);
+  --card: var(--surface);
+  --card-foreground: var(--ink-900);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink-900);
+  --primary: var(--ivy-700);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-2);
+  --secondary-foreground: var(--ink-900);
+  --muted: var(--paper-2);
+  --muted-foreground: var(--ink-600);
+  --accent: var(--paper-2);
+  --accent-foreground: var(--ink-900);
+  --destructive: var(--danger);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--ivy-700);
+  --radius: 10px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--ivy-200);
+    color: var(--ink-900);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ivy-700);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility font-display {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility measure {
+  max-width: 68ch;
+}
+
+@utility eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@utility safe-bottom {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Elements revealed by GSAP start hidden only when JS + motion are available */
+html.js-motion [data-reveal] {
+  opacity: 0;
+}
+
+/* Page headlines rise in with CSS alone, so they paint immediately (good LCP)
+   instead of waiting for JavaScript. */
+[data-split] {
+  animation: headline-in 700ms var(--ease-soft) both;
+}
+@keyframes headline-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.3em);
+    filter: blur(2px);
+  }
+}
+
+/* Route view transitions: a short crossfade with a slight rise */
+::view-transition-old(root) {
+  animation: 160ms var(--ease-in-soft) both vt-fade-out;
+}
+::view-transition-new(root) {
+  animation: 240ms var(--ease-soft) both vt-fade-in;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  html.js-motion [data-reveal] {
+    opacity: 1;
+  }
+  [data-split] {
+    animation: none;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }
