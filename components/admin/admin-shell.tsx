@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { CalendarDays, GraduationCap, Inbox, LogOut, MessageSquareQuote, Search, UserRoundPlus, Users } from "lucide-react";
 import {
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -122,7 +123,10 @@ export function AdminShell({ children, counts, index, ownerName }: { children: R
         <div className="mt-auto flex flex-col gap-1 border-t border-line pt-4">
           <p className="truncate px-3 text-sm text-ink-600">{ownerName}</p>
           <form action={signOut}>
-            <button type="submit" className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-ink-600 transition-colors hover:bg-paper-2 hover:text-ink-900">
+            <button
+              type="submit"
+              className="flex h-11 w-full items-center gap-3 rounded-md px-3 text-sm font-semibold text-ink-600 transition-colors hover:bg-paper-2 hover:text-ink-900"
+            >
               <LogOut className="size-4" /> Sign out
             </button>
           </form>
@@ -137,7 +141,12 @@ export function AdminShell({ children, counts, index, ownerName }: { children: R
             <span className="font-display text-lg">Owner</span>
           </Link>
           <div className="flex items-center gap-1">
-            <button type="button" onClick={() => setOpen(true)} aria-label="Search" className="flex size-11 items-center justify-center rounded-md text-ink-600">
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Search"
+              className="flex size-11 items-center justify-center rounded-md text-ink-600"
+            >
               <Search className="size-5" />
             </button>
             <form action={signOut}>
@@ -151,7 +160,10 @@ export function AdminShell({ children, counts, index, ownerName }: { children: R
       </div>
 
       {/* Mobile tab bar */}
-      <nav aria-label="Dashboard" className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-6 border-t border-line bg-surface/95 backdrop-blur-md safe-bottom lg:hidden">
+      <nav
+        aria-label="Dashboard"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-6 border-t border-line bg-surface/95 backdrop-blur-md safe-bottom lg:hidden"
+      >
         {NAV.map((item) => {
           const active = pathname.startsWith(item.href);
           const count = "count" in item ? counts[item.count] : 0;
@@ -160,7 +172,10 @@ export function AdminShell({ children, counts, index, ownerName }: { children: R
               key={item.href}
               href={item.href}
               aria-current={active ? "page" : undefined}
-              className={cn("relative flex min-h-14 flex-col items-center justify-center gap-1 text-[11px] font-semibold", active ? "text-ivy-700" : "text-ink-600")}
+              className={cn(
+                "relative flex min-h-14 flex-col items-center justify-center gap-1 text-[11px] font-semibold",
+                active ? "text-ivy-700" : "text-ink-600",
+              )}
             >
               <item.icon className="size-5" />
               {"short" in item ? item.short : item.label}
@@ -171,58 +186,70 @@ export function AdminShell({ children, counts, index, ownerName }: { children: R
       </nav>
 
       <CommandDialog open={open} onOpenChange={setOpen} title="Search IvyUp" description="Jump to a section, student, or tutor">
-        <CommandInput placeholder="Search students, tutors, sections…" />
-        <CommandList>
-          <CommandEmpty>Nothing matches that.</CommandEmpty>
-          <CommandGroup heading="Go to">
-            {NAV.map((item) => (
-              <CommandItem key={item.href} value={`go ${item.label}`} onSelect={() => go(item.href)} className="min-h-11">
-                <item.icon />
-                {item.label}
-                <CommandShortcut>G {item.key.toUpperCase()}</CommandShortcut>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-          {index.students.length > 0 && (
-            <>
-              <CommandSeparator />
-              <CommandGroup heading="Students">
-                {index.students.map((s) => (
-                  <CommandItem key={s.id} value={`student ${s.label} ${s.sub} ${s.id}`} onSelect={() => go(`/admin/prospects?student=${s.id}`)} className="min-h-11">
-                    <span className="font-semibold">{s.label}</span>
-                    <span className="text-ink-600">{s.sub}</span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </>
-          )}
-          {index.tutors.length > 0 && (
-            <>
-              <CommandSeparator />
-              <CommandGroup heading="Tutors">
-                {index.tutors.map((t) => (
-                  <CommandItem key={t.id} value={`tutor ${t.label} ${t.sub} ${t.id}`} onSelect={() => go(`/admin/tutors/${t.id}`)} className="min-h-11">
-                    <span className="font-semibold">{t.label}</span>
-                    <span className="text-ink-600">{t.sub}</span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </>
-          )}
-          {index.applications.length > 0 && (
-            <>
-              <CommandSeparator />
-              <CommandGroup heading="Tutor applications">
-                {index.applications.map((a) => (
-                  <CommandItem key={a.id} value={`application ${a.label} ${a.sub} ${a.id}`} onSelect={() => go(`/admin/tutors?app=${a.id}`)} className="min-h-11">
-                    <span className="font-semibold">{a.label}</span>
-                    <span className="text-ink-600">{a.sub}</span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </>
-          )}
-        </CommandList>
+        <Command>
+          <CommandInput placeholder="Search students, tutors, sections…" />
+          <CommandList>
+            <CommandEmpty>Nothing matches that.</CommandEmpty>
+            <CommandGroup heading="Go to">
+              {NAV.map((item) => (
+                <CommandItem key={item.href} value={`go ${item.label}`} onSelect={() => go(item.href)} className="min-h-11">
+                  <item.icon />
+                  {item.label}
+                  <CommandShortcut>G {item.key.toUpperCase()}</CommandShortcut>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+            {index.students.length > 0 && (
+              <>
+                <CommandSeparator />
+                <CommandGroup heading="Students">
+                  {index.students.map((s) => (
+                    <CommandItem
+                      key={s.id}
+                      value={`student ${s.label} ${s.sub} ${s.id}`}
+                      onSelect={() => go(`/admin/prospects?student=${s.id}`)}
+                      className="min-h-11"
+                    >
+                      <span className="font-semibold">{s.label}</span>
+                      <span className="text-ink-600">{s.sub}</span>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </>
+            )}
+            {index.tutors.length > 0 && (
+              <>
+                <CommandSeparator />
+                <CommandGroup heading="Tutors">
+                  {index.tutors.map((t) => (
+                    <CommandItem key={t.id} value={`tutor ${t.label} ${t.sub} ${t.id}`} onSelect={() => go(`/admin/tutors/${t.id}`)} className="min-h-11">
+                      <span className="font-semibold">{t.label}</span>
+                      <span className="text-ink-600">{t.sub}</span>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </>
+            )}
+            {index.applications.length > 0 && (
+              <>
+                <CommandSeparator />
+                <CommandGroup heading="Tutor applications">
+                  {index.applications.map((a) => (
+                    <CommandItem
+                      key={a.id}
+                      value={`application ${a.label} ${a.sub} ${a.id}`}
+                      onSelect={() => go(`/admin/tutors?app=${a.id}`)}
+                      className="min-h-11"
+                    >
+                      <span className="font-semibold">{a.label}</span>
+                      <span className="text-ink-600">{a.sub}</span>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </>
+            )}
+          </CommandList>
+        </Command>
       </CommandDialog>
     </div>
   );
